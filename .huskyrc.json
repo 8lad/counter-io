@@ -1,0 +1,5 @@
+{
+  "hooks": {
+    "pre-commit": "react-scripts test -- --watchAll=false"
+  }
+}
