@@ -1,0 +1,14 @@
+.task-list__wrapper {
+  margin: 0 auto;
+}
+
+.list__item {
+  background-color: #ebebeb;
+  border: 2px solid transparent;
+  border-bottom: 2px solid #cccccc;
+  margin: 0 auto 5px;
+  transition: all 0.5s;
+  &:hover {
+    border: 2px solid #00000c;
+  }
+}

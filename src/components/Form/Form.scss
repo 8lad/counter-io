@@ -1,0 +1,22 @@
+@import "src/variables";
+.form__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: $main-bg;
+  margin-bottom: 20px;
+  vertical-align: center;
+  padding: 13px 16px;
+  flex-wrap: wrap;
+  button {
+    line-height: 2;
+  }
+}
+
+.form__example {
+  width: 100%;
+  text-align: left;
+}
+.form__input {
+  width: 60%;
+}

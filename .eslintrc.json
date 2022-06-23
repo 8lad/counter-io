@@ -12,7 +12,6 @@
     "plugin:import/typescript",
     "plugin:prettier/recommended"
   ],
-  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -21,17 +20,22 @@
     "sourceType": "module",
     "project": "./tsconfig.json"
   },
+  "parser": "@typescript-eslint/parser",
   "plugins": ["react", "@typescript-eslint", "prettier"],
   "rules": {
+    "unused-imports/no-unused-imports": "off",
+    "@typescript-eslint/no-unused-vars": ["warn"],
+    "import/prefer-default-export": "off",
+    "prettier/prettier": ["off", { "singleQuote": true }],
     "quotes": [
-      "error",
+      "warn",
       "double",
       {
         "avoidEscape": true
       }
     ],
     "@typescript-eslint/quotes": [
-      "error",
+      "warn",
       "double",
       {
         "avoidEscape": true
