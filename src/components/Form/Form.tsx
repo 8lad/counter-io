@@ -25,9 +25,9 @@ export function Form() {
           <Button>Save</Button>
           <Button>Delete</Button>
         </ButtonGroup>
-        {/* <Box className="form__example">
+        <Box className="form__example">
           <ListItemText primary="Single-line item" secondary="#main #test #view" />
-        </Box> */}
+        </Box>
       </Box>
     </Box>
   );
