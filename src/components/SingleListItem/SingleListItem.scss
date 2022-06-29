@@ -1,3 +1,4 @@
+@import "src/variables";
 .list__item {
   background-color: #ebebeb;
   border: 2px solid transparent;
@@ -13,6 +14,13 @@
   }
   &-input {
     margin-bottom: 5px;
+  }
+  &-error {
+    font-size: 14px;
+    color: $error-color;
+    width: 100%;
+    text-align: left;
+    padding: 5px 0;
   }
   .Mui-disabled.list__item-input::before {
     border-bottom: 1px solid transparent;

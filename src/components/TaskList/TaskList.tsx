@@ -1,24 +1,28 @@
-/* eslint-disable no-irregular-whitespace */
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
+import { useSelector } from "react-redux";
 import { SingleListItem } from "../SingleListItem";
 import "./TaskList.scss";
 
 export function TaskList() {
+  const allTasks = useSelector((state: any) => state.tasksReducer.tasks);
+  const [taskList, setTaskList] = useState([]);
+
+  useEffect(() => {
+    setTaskList(allTasks);
+  }, [allTasks]);
+
   return (
     <Box className="container">
       <Box>
         <List>
-          <SingleListItem text="Single-line item" tags="#main #test #view" />
-          <SingleListItem text="Single-line item" tags="#main #test #view" />
-          <SingleListItem text="Single-line item" tags="#main #test #view" />
+          {taskList &&
+            taskList.map((item: any) => (
+              <SingleListItem key={item.id} text={item.text} tags={item.tags} id={item.id} />
+            ))}
         </List>
       </Box>
     </Box>
   );
 }
-
-// "SingleListItem" невозможно использовать как компонент JSX.
-// eslint-disable-next-line no-irregular-whitespace
-//   Тип возвращаемого значения "ReactNode" не является допустимым элементом JSX.
-//     Тип "undefined" не может быть назначен для типа "Element | null".
