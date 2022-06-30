@@ -23,12 +23,12 @@ interface SingleListItemProps {
 }
 
 export function SingleListItem({ text, tags, id }: SingleListItemProps) {
-  const [editableText, setEditableText] = useState(true);
-  const [pinnedTask, setPinnedTask] = useState(false);
-  const [editedText, setEditedText] = useState("");
-  const [editedTags, setEditedTags] = useState("");
-  const [editedTextError, setEditedTextError] = useState(false);
-  const [editedTagsError, setEditedTagsError] = useState(false);
+  const [editableText, setEditableText] = useState<boolean>(true);
+  const [pinnedTask, setPinnedTask] = useState<boolean>(false);
+  const [editedText, setEditedText] = useState<string>("");
+  const [editedTags, setEditedTags] = useState<string>("");
+  const [editedTextError, setEditedTextError] = useState<boolean>(false);
+  const [editedTagsError, setEditedTagsError] = useState<boolean>(false);
 
   const dispatch = useDispatch();
 

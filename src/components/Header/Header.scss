@@ -1,0 +1,11 @@
+.header {
+  &__button.MuiButton-contained {
+    padding: 7.5px 16px;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    box-shadow: none;
+  }
+  &__search {
+    border-radius: 4px 0 0 4px !important;
+  }
+}

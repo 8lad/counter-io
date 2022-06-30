@@ -1,4 +1,12 @@
-import { ADD_SINGLE_TASK, DELETE_SINGLE_TASK, SET_PIN_TASK, UPDATE_SINGLE_TASK, DISABLE_PIN_TASK } from "./types";
+import {
+  ADD_SINGLE_TASK,
+  DELETE_SINGLE_TASK,
+  SET_PIN_TASK,
+  UPDATE_SINGLE_TASK,
+  DISABLE_PIN_TASK,
+  SET_IS_FILTERED,
+  SET_SEARCH_RULE,
+} from "./types";
 
 export interface SingleTask {
   id: string;
@@ -9,16 +17,18 @@ export interface SingleTask {
 interface InitialState {
   tasks: SingleTask[];
   isTagFiltered: boolean;
+  searchField: string;
 }
 
 interface Action {
   type: string;
-  payload?: SingleTask | string | any;
+  payload?: SingleTask | string | boolean | any;
 }
 
 const initialState: InitialState = {
   tasks: [],
   isTagFiltered: false,
+  searchField: "",
 };
 
 export const tasksReducer = (state = initialState, action: Action) => {
@@ -51,6 +61,16 @@ export const tasksReducer = (state = initialState, action: Action) => {
       return {
         ...state,
         tasks: state.tasks.map((item) => (item.id === action.payload.id ? action.payload : item)),
+      };
+    case SET_IS_FILTERED:
+      return {
+        ...state,
+        isTagFiltered: action.payload,
+      };
+    case SET_SEARCH_RULE:
+      return {
+        ...state,
+        searchField: action.payload,
       };
     default:
       return state;

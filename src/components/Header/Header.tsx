@@ -1,12 +1,17 @@
+import { useState } from "react";
 import { styled, alpha } from "@mui/material/styles";
+import { useDispatch } from "react-redux";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import { setSearchRule, setIsFiltered } from "../../redux/actions";
+import "./Header.scss";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -50,9 +55,24 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export function Header() {
+  const [searchText, setSearchText] = useState<string>("");
+  const [searchTextError, setSearchTextError] = useState<boolean>(false);
+  const dispatch = useDispatch();
+
+  const sendSarchText = () => {
+    if (!searchText || searchText.length < 2) {
+      setSearchTextError(true);
+    } else {
+      dispatch(setSearchRule(searchText));
+      setSearchText("");
+      setSearchTextError(false);
+    }
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
+        className="header"
         position="static"
         style={{
           backgroundColor: "rgb(204 204 204 / 23%)",
@@ -69,13 +89,25 @@ export function Header() {
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}>
             Your personal ToDo list
           </Typography>
-          <FormControlLabel control={<Checkbox />} label="Tag filter" />
-          <Search>
+          <FormControlLabel
+            control={<Checkbox onChange={(e) => dispatch(setIsFiltered(e.target.checked))} />}
+            label="Tag filter"
+          />
+          <Search className="header__search">
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
-            <StyledInputBase placeholder="Search…" inputProps={{ "aria-label": "search" }} />
+            <StyledInputBase
+              error
+              placeholder={searchTextError ? "Field is empty" : "Search…"}
+              inputProps={{ "aria-label": "search" }}
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+            />
           </Search>
+          <Button className="header__button" variant="contained" onClick={sendSarchText}>
+            Go
+          </Button>
         </Toolbar>
       </AppBar>
     </Box>
