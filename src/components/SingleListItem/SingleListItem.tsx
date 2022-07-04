@@ -54,8 +54,8 @@ export function SingleListItem({ text, tags, id }: SingleListItemProps): JSX.Ele
         tags: editedTags,
       }),
     );
-    setEditedTagsError(false);
     setEditedTextError(false);
+    setEditedTagsError(false);
   };
 
   const editTask = (): void => {
@@ -67,7 +67,7 @@ export function SingleListItem({ text, tags, id }: SingleListItemProps): JSX.Ele
   useEffect(() => {
     setEditedText(text);
     setEditedTags(tags);
-  }, [text, tags, editedTags]);
+  }, [text, tags]);
 
   return (
     <ListItem
