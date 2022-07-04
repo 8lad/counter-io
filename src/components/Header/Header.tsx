@@ -54,12 +54,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export function Header() {
+export function Header(): JSX.Element {
   const [searchText, setSearchText] = useState<string>("");
   const [searchTextError, setSearchTextError] = useState<boolean>(false);
   const dispatch = useDispatch();
 
-  const sendSarchText = () => {
+  const sendSarchText = (): void => {
     if (!searchText || searchText.length < 2) {
       setSearchTextError(true);
     } else {

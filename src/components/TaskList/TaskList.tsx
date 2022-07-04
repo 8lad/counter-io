@@ -4,13 +4,13 @@ import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useSelector, useDispatch } from "react-redux";
-import { SingleListItem } from "../SingleListItem";
+import { SingleListItem } from "../SingleListItem/SingleListItem";
 import { setSearchRule } from "../../redux/actions";
 import { filterTasks } from "../../helpers/helpers";
 import "./TaskList.scss";
 import { SingleTask } from "../../redux/tasksReducer";
 
-export function TaskList() {
+export function TaskList(): JSX.Element {
   const { tasks, searchField, isTagFiltered } = useSelector((state: any) => state.tasksReducer);
   const [taskList, setTaskList] = useState<[] | SingleTask[]>([]);
   const dispatch = useDispatch();

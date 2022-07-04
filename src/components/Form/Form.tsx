@@ -10,15 +10,15 @@ import { addSingleTask } from "../../redux/actions";
 import "./Form.scss";
 import { addingHashTag } from "../../helpers/helpers";
 
-export function Form() {
-  const [textValue, setTextValue] = useState("");
-  const [singleTaskText, setSingleTaskText] = useState("");
-  const [tagText, setTagText] = useState("");
-  const [inputError, setInputError] = useState(false);
-  const [inputErrorText, setInputErrorText] = useState("");
+export function Form(): JSX.Element {
+  const [textValue, setTextValue] = useState<string>("");
+  const [singleTaskText, setSingleTaskText] = useState<string>("");
+  const [tagText, setTagText] = useState<string>("");
+  const [inputError, setInputError] = useState<boolean>(false);
+  const [inputErrorText, setInputErrorText] = useState<string>("");
   const dispatch = useDispatch();
 
-  const saveSingleTask = () => {
+  const saveSingleTask = (): void => {
     if (tagText && singleTaskText) {
       dispatch(addSingleTask({ id: nanoid(), tags: tagText, text: singleTaskText }));
       setSingleTaskText("");
@@ -31,7 +31,7 @@ export function Form() {
     }
   };
 
-  const deleteTask = () => {
+  const deleteTask = (): void => {
     setSingleTaskText("");
     setTagText("");
     setTextValue("");

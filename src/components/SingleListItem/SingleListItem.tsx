@@ -22,7 +22,7 @@ interface SingleListItemProps {
   id: string;
 }
 
-export function SingleListItem({ text, tags, id }: SingleListItemProps) {
+export function SingleListItem({ text, tags, id }: SingleListItemProps): JSX.Element {
   const [editableText, setEditableText] = useState<boolean>(true);
   const [pinnedTask, setPinnedTask] = useState<boolean>(false);
   const [editedText, setEditedText] = useState<string>("");
@@ -32,33 +32,33 @@ export function SingleListItem({ text, tags, id }: SingleListItemProps) {
 
   const dispatch = useDispatch();
 
-  const setPin = () => {
+  const setPin = (): void => {
     setPinnedTask((state) => !state);
     !pinnedTask ? dispatch(setPinTask(id)) : dispatch(disablePinTask(id));
   };
 
-  const saveTask = () => {
-    if (!editedText) {
+  const saveTask = (): void => {
+    if (!editedText.length) {
       setEditedTextError(true);
       return;
     }
-    if (!editedTags) {
+    if (!editedTags.length) {
       setEditedTagsError(true);
-    } else {
-      setEditableText(true);
-      dispatch(
-        updateSingleTask({
-          id,
-          text: editedText,
-          tags: editedTags,
-        }),
-      );
-      setEditedTagsError(false);
-      setEditedTextError(false);
+      return;
     }
+    setEditableText(true);
+    dispatch(
+      updateSingleTask({
+        id,
+        text: editedText,
+        tags: editedTags,
+      }),
+    );
+    setEditedTagsError(false);
+    setEditedTextError(false);
   };
 
-  const editTask = () => {
+  const editTask = (): void => {
     setEditableText(false);
     setEditedTagsError(false);
     setEditedTextError(false);
@@ -67,7 +67,7 @@ export function SingleListItem({ text, tags, id }: SingleListItemProps) {
   useEffect(() => {
     setEditedText(text);
     setEditedTags(tags);
-  }, [text, tags]);
+  }, [text, tags, editedTags]);
 
   return (
     <ListItem
@@ -101,7 +101,7 @@ export function SingleListItem({ text, tags, id }: SingleListItemProps) {
           defaultValue={editedText}
           error={editedTextError}
           fullWidth
-          onChange={(e) => {
+          onBlur={(e) => {
             setEditedText(e.target.value);
           }}
         />
@@ -112,7 +112,7 @@ export function SingleListItem({ text, tags, id }: SingleListItemProps) {
           defaultValue={addingHashTag(editedTags)}
           error={editedTagsError}
           fullWidth
-          onChange={(e) => {
+          onBlur={(e) => {
             setEditedTags(e.target.value);
           }}
         />

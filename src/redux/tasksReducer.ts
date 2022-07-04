@@ -13,16 +13,14 @@ export interface SingleTask {
   text: string;
   tags: string;
 }
-
+export interface Action<T> {
+  type: string;
+  payload?: T;
+}
 interface InitialState {
   tasks: SingleTask[];
   isTagFiltered: boolean;
   searchField: string;
-}
-
-interface Action {
-  type: string;
-  payload?: SingleTask | string | boolean | any;
 }
 
 const initialState: InitialState = {
@@ -31,10 +29,13 @@ const initialState: InitialState = {
   searchField: "",
 };
 
-export const tasksReducer = (state = initialState, action: Action) => {
+export const tasksReducer = (state: InitialState = initialState, action: Action<SingleTask | string | boolean>) => {
   const { tasks } = state;
   const taskIndex = tasks.findIndex((item) => item.id === action.payload);
   const currentTask = tasks.slice(taskIndex, taskIndex + 1);
+  const hasSingleTaskId = (task: SingleTask, targetObj: SingleTask): boolean => {
+    return typeof task === "object" && "id" in task && task.id === targetObj.id;
+  };
 
   switch (action.type) {
     case ADD_SINGLE_TASK:
@@ -60,7 +61,7 @@ export const tasksReducer = (state = initialState, action: Action) => {
     case UPDATE_SINGLE_TASK:
       return {
         ...state,
-        tasks: state.tasks.map((item) => (item.id === action.payload.id ? action.payload : item)),
+        tasks: state.tasks.map((item) => (hasSingleTaskId(action.payload as SingleTask, item) ? action.payload : item)),
       };
     case SET_IS_FILTERED:
       return {

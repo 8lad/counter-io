@@ -1,9 +1,9 @@
 import "./App.scss";
-import { Form } from "./components/Form";
-import { Header } from "./components/Header";
-import { TaskList } from "./components/TaskList";
+import { Form } from "./components/Form/Form";
+import { Header } from "./components/Header/Header";
+import { TaskList } from "./components/TaskList/TaskList";
 
-function App() {
+function App(): JSX.Element {
   return (
     <div className="App">
       <Header />
