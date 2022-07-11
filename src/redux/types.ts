@@ -7,3 +7,6 @@ export const REMOVE_PIN_TASK: string = "REMOVE_PIN_TASK";
 export const UPDATE_SINGLE_TASK: string = "UPDATE_SINGLE_TASK";
 export const SET_IS_FILTERED: string = "SET_IS_FILTERED";
 export const SET_SEARCH_RULE: string = "SET_SEARCH_RULE";
+export const SET_LOADING_STATE: string = "SET_LOADING_STATE";
+export const SET_ERROR_MESSAGE: string = "SET_ERROR_MESSAGE";
+export const SET_ALL_TASKS: string = "SET_ALL_TASKS";

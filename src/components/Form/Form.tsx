@@ -20,7 +20,7 @@ export function Form(): JSX.Element {
 
   const saveSingleTask = (): void => {
     if (tagText && singleTaskText) {
-      dispatch(addSingleTask({ id: nanoid(), tags: tagText, text: singleTaskText }));
+      dispatch(addSingleTask({ id: nanoid(), tags: tagText, text: singleTaskText, isPinned: false }));
       setSingleTaskText("");
       setTagText("");
       setTextValue("");

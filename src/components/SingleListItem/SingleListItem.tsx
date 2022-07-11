@@ -20,11 +20,12 @@ interface SingleListItemProps {
   text: string;
   tags: string;
   id: string;
+  isPinned: boolean;
 }
 
-export function SingleListItem({ text, tags, id }: SingleListItemProps): JSX.Element {
-  const [editableText, setEditableText] = useState<boolean>(true);
-  const [pinnedTask, setPinnedTask] = useState<boolean>(false);
+export function SingleListItem({ text, tags, id, isPinned }: SingleListItemProps): JSX.Element {
+  const [disabledText, setDisabledText] = useState<boolean>(true);
+  const [pinnedTask, setPinnedTask] = useState<boolean>(isPinned);
   const [editedText, setEditedText] = useState<string>("");
   const [editedTags, setEditedTags] = useState<string>("");
   const [editedTextError, setEditedTextError] = useState<boolean>(false);
@@ -46,12 +47,13 @@ export function SingleListItem({ text, tags, id }: SingleListItemProps): JSX.Ele
       setEditedTagsError(true);
       return;
     }
-    setEditableText(true);
+    setDisabledText(true);
     dispatch(
       updateSingleTask({
         id,
         text: editedText,
         tags: editedTags,
+        isPinned: pinnedTask,
       }),
     );
     setEditedTextError(false);
@@ -59,7 +61,7 @@ export function SingleListItem({ text, tags, id }: SingleListItemProps): JSX.Ele
   };
 
   const editTask = (): void => {
-    setEditableText(false);
+    setDisabledText(false);
     setEditedTagsError(false);
     setEditedTextError(false);
   };
@@ -97,23 +99,25 @@ export function SingleListItem({ text, tags, id }: SingleListItemProps): JSX.Ele
         <Input
           className="list__item-input"
           multiline
-          disabled={editableText}
+          disabled={disabledText}
           defaultValue={editedText}
           error={editedTextError}
           fullWidth
           onBlur={(e) => {
             setEditedText(e.target.value);
+            setDisabledText(true);
           }}
         />
         <Input
           className="list__item-input"
           multiline
-          disabled={editableText}
+          disabled={disabledText}
           defaultValue={addingHashTag(editedTags)}
           error={editedTagsError}
           fullWidth
           onBlur={(e) => {
             setEditedTags(e.target.value);
+            setDisabledText(true);
           }}
         />
         {(editedTextError || editedTagsError) && (
