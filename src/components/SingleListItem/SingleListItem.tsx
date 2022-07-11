@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import IconButton from "@mui/material/IconButton";
@@ -13,7 +13,12 @@ import Input from "@mui/material/Input";
 import "./SingleListItem.scss";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { deleteSingleTask, setPinTask, updateSingleTask, disablePinTask } from "../../redux/actions";
+import {
+  deleteSingleTaskWithDB,
+  updateSingleTaskWithDB,
+  setPinTaskWithDB,
+  disablePinTaskWithDB,
+} from "../../redux/actions";
 import { addingHashTag } from "../../helpers/helpers";
 
 interface SingleListItemProps {
@@ -30,12 +35,12 @@ export function SingleListItem({ text, tags, id, isPinned }: SingleListItemProps
   const [editedTags, setEditedTags] = useState<string>("");
   const [editedTextError, setEditedTextError] = useState<boolean>(false);
   const [editedTagsError, setEditedTagsError] = useState<boolean>(false);
-
-  const dispatch = useDispatch();
+  const { tasks } = useSelector((state: any) => state.tasksReducer);
+  const dispatch = useDispatch<any>();
 
   const setPin = (): void => {
     setPinnedTask((state) => !state);
-    !pinnedTask ? dispatch(setPinTask(id)) : dispatch(disablePinTask(id));
+    !pinnedTask ? dispatch(setPinTaskWithDB(id, tasks)) : dispatch(disablePinTaskWithDB(id, tasks));
   };
 
   const saveTask = (): void => {
@@ -49,12 +54,15 @@ export function SingleListItem({ text, tags, id, isPinned }: SingleListItemProps
     }
     setDisabledText(true);
     dispatch(
-      updateSingleTask({
-        id,
-        text: editedText,
-        tags: editedTags,
-        isPinned: pinnedTask,
-      }),
+      updateSingleTaskWithDB(
+        {
+          id,
+          text: editedText,
+          tags: editedTags,
+          isPinned: pinnedTask,
+        },
+        tasks,
+      ),
     );
     setEditedTextError(false);
     setEditedTagsError(false);
@@ -85,7 +93,10 @@ export function SingleListItem({ text, tags, id, isPinned }: SingleListItemProps
           <IconButton aria-label="save" onClick={saveTask}>
             <SaveIcon />
           </IconButton>
-          <IconButton aria-label="delete" onClick={() => dispatch(deleteSingleTask(id))} disabled={pinnedTask}>
+          <IconButton
+            aria-label="delete"
+            onClick={() => dispatch(deleteSingleTaskWithDB(id, tasks))}
+            disabled={pinnedTask}>
             <DeleteIcon />
           </IconButton>
         </>

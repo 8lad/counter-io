@@ -1,4 +1,3 @@
-export const CLEAN_SINGLE_TASK: string = "CLEAN_SINGLE_TASK";
 export const ADD_SINGLE_TASK: string = "ADD_SINGLE_TASK";
 export const DELETE_SINGLE_TASK: string = "DELETE_SINGLE_TASK";
 export const SET_PIN_TASK: string = "SET_PIN_TASK";

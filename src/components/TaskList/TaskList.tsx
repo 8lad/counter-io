@@ -7,7 +7,7 @@ import { SpinnerDotted } from "spinners-react";
 import { useSelector, useDispatch } from "react-redux";
 import { SingleListItem } from "../SingleListItem/SingleListItem";
 import { setSearchRule, loadAllTasks } from "../../redux/actions";
-import { filterTasks, setData } from "../../helpers/helpers";
+import { filterTasks } from "../../helpers/helpers";
 import "./TaskList.scss";
 import { SingleTask } from "../../redux/tasksReducer";
 
@@ -16,15 +16,13 @@ export function TaskList(): JSX.Element {
     (state: any) => state.tasksReducer,
   );
   const [taskList, setTaskList] = useState<[] | SingleTask[]>([]);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
+  const isHasTasks = !taskList.length && !errorMessage && !searchField;
+  const isEmptySearch = !taskList.length && searchField;
 
   useEffect(() => {
-    loadAllTasks(dispatch);
+    dispatch(loadAllTasks());
   }, [dispatch]);
-
-  useEffect(() => {
-    setData("baseData", tasks);
-  }, [tasks]);
 
   useEffect(() => {
     searchField ? setTaskList(filterTasks(searchField, tasks, isTagFiltered)) : setTaskList(tasks);
@@ -32,7 +30,7 @@ export function TaskList(): JSX.Element {
   return (
     <Box className="container">
       <Box>
-        {!taskList.length && !errorMessage && (
+        {isHasTasks && (
           <Typography variant="h5" className="task__title">
             You don`t have any task yet. Let`s create new one! 😃
           </Typography>
@@ -54,7 +52,7 @@ export function TaskList(): JSX.Element {
               <SingleListItem key={item.id} text={item.text} tags={item.tags} id={item.id} isPinned={item.isPinned} />
             ))}
         </List>
-        {!taskList.length && searchField && (
+        {isEmptySearch && (
           <Box className="task-list__message">
             <Typography className="task-list__text">Ooops! We didn`t find anything </Typography>
             <Button className="task-list__button" variant="contained" onClick={() => dispatch(setSearchRule(""))}>

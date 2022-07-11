@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { ListItemText } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { nanoid } from "nanoid";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import TextField from "@mui/material/TextField";
-import { addSingleTask } from "../../redux/actions";
+import { addSingleTaskWithDB } from "../../redux/actions";
 import "./Form.scss";
 import { addingHashTag } from "../../helpers/helpers";
 
@@ -16,11 +16,12 @@ export function Form(): JSX.Element {
   const [tagText, setTagText] = useState<string>("");
   const [inputError, setInputError] = useState<boolean>(false);
   const [inputErrorText, setInputErrorText] = useState<string>("");
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
+  const { tasks } = useSelector((state: any) => state.tasksReducer);
 
   const saveSingleTask = (): void => {
     if (tagText && singleTaskText) {
-      dispatch(addSingleTask({ id: nanoid(), tags: tagText, text: singleTaskText, isPinned: false }));
+      dispatch(addSingleTaskWithDB({ id: nanoid(), tags: tagText, text: singleTaskText, isPinned: false }, tasks));
       setSingleTaskText("");
       setTagText("");
       setTextValue("");
