@@ -10,14 +10,15 @@ import { setSearchRule, loadAllTasks } from "../../redux/actions";
 import { filterTasks } from "../../helpers/helpers";
 import "./TaskList.scss";
 import { SingleTask } from "../../redux/tasksReducer";
+import { StateType } from "../../redux/rootReducer";
 
 export function TaskList(): JSX.Element {
   const { tasks, searchField, isTagFiltered, errorMessage, isLoading } = useSelector(
-    (state: any) => state.tasksReducer,
+    (state: StateType) => state.tasksReducer,
   );
   const [taskList, setTaskList] = useState<[] | SingleTask[]>([]);
   const dispatch = useDispatch<any>();
-  const isHasTasks = !taskList.length && !errorMessage && !searchField;
+  const isHasTasks = !taskList.length && !errorMessage && !searchField && !isLoading;
   const isEmptySearch = !taskList.length && searchField;
 
   useEffect(() => {
@@ -35,7 +36,7 @@ export function TaskList(): JSX.Element {
             You don`t have any task yet. Let`s create new one! 😃
           </Typography>
         )}
-        {isLoading && !errorMessage && <SpinnerDotted color="#1976d2" />}
+        {isLoading && !errorMessage && <SpinnerDotted color="#1976d2" className="task__spinner" />}
         {errorMessage && (
           <Box>
             <Typography variant="h5" className="task__title">
@@ -48,7 +49,7 @@ export function TaskList(): JSX.Element {
         )}
         <List>
           {taskList &&
-            taskList.map((item: any) => (
+            taskList.map((item: SingleTask) => (
               <SingleListItem key={item.id} text={item.text} tags={item.tags} id={item.id} isPinned={item.isPinned} />
             ))}
         </List>

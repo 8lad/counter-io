@@ -1,4 +1,5 @@
 import { ref, child, get } from "firebase/database";
+import { Dispatch } from "redux";
 import { database } from "../firebase";
 import { SingleTask, Action } from "./tasksReducer";
 import { setData } from "../helpers/helpers";
@@ -17,8 +18,6 @@ import {
 } from "./types";
 
 const dbRef = ref(database);
-
-//  setData("baseData", tasks);
 
 export const setSearchRule = (payload: string): Action<string> => ({ type: SET_SEARCH_RULE, payload });
 
@@ -42,7 +41,7 @@ export const setAllTasks = (payload: SingleTask[]): Action<SingleTask[]> => ({ t
 
 // async actions
 
-export const disablePinTaskWithDB = (payload: string, tasks: SingleTask[] | []) => async (dispatch: any) => {
+export const disablePinTaskWithDB = (payload: string, tasks: SingleTask[] | []) => async (dispatch: Dispatch) => {
   const taskIndex = tasks.findIndex((item) => item.id === payload);
   const currentTask = tasks.slice(taskIndex, taskIndex + 1)[0];
   try {
@@ -58,7 +57,7 @@ export const disablePinTaskWithDB = (payload: string, tasks: SingleTask[] | []) 
   }
 };
 
-export const setPinTaskWithDB = (payload: string, tasks: SingleTask[] | []) => async (dispatch: any) => {
+export const setPinTaskWithDB = (payload: string, tasks: SingleTask[] | []) => async (dispatch: Dispatch) => {
   const taskIndex = tasks.findIndex((item) => item.id === payload);
   const currentTask = tasks.slice(taskIndex, taskIndex + 1)[0];
   try {
@@ -74,7 +73,7 @@ export const setPinTaskWithDB = (payload: string, tasks: SingleTask[] | []) => a
   }
 };
 
-export const addSingleTaskWithDB = (payload: SingleTask, tasks: SingleTask[] | []) => async (dispatch: any) => {
+export const addSingleTaskWithDB = (payload: SingleTask, tasks: SingleTask[] | []) => async (dispatch: Dispatch) => {
   try {
     dispatch(addSingleTask(payload));
     setData("baseData", [...tasks, payload]);
@@ -85,7 +84,7 @@ export const addSingleTaskWithDB = (payload: SingleTask, tasks: SingleTask[] | [
   }
 };
 
-export const updateSingleTaskWithDB = (payload: SingleTask, tasks: SingleTask[] | []) => async (dispatch: any) => {
+export const updateSingleTaskWithDB = (payload: SingleTask, tasks: SingleTask[] | []) => async (dispatch: Dispatch) => {
   try {
     dispatch(updateSingleTask(payload));
     setData("baseData", [...tasks.map((item) => (item.id === payload.id ? payload : item))]);
@@ -96,7 +95,7 @@ export const updateSingleTaskWithDB = (payload: SingleTask, tasks: SingleTask[] 
   }
 };
 
-export const deleteSingleTaskWithDB = (payload: string, tasks: SingleTask[] | []) => async (dispatch: any) => {
+export const deleteSingleTaskWithDB = (payload: string, tasks: SingleTask[] | []) => async (dispatch: Dispatch) => {
   try {
     dispatch(deleteSingleTask(payload));
     setData("baseData", [...tasks.filter((item) => item.id !== payload)]);
@@ -107,7 +106,7 @@ export const deleteSingleTaskWithDB = (payload: string, tasks: SingleTask[] | []
   }
 };
 
-export const loadAllTasks = () => async (dispatch: any) => {
+export const loadAllTasks = () => async (dispatch: Dispatch) => {
   try {
     dispatch(setLoadingState(true));
     const response = await get(child(dbRef, "baseData"));

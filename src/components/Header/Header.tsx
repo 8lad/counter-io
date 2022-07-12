@@ -64,9 +64,13 @@ export function Header(): JSX.Element {
       setSearchTextError(true);
     } else {
       dispatch(setSearchRule(searchText));
-      setSearchText("");
       setSearchTextError(false);
     }
+  };
+
+  const clearSearchField = (): void => {
+    setSearchText("");
+    dispatch(setSearchRule(""));
   };
 
   return (
@@ -107,6 +111,9 @@ export function Header(): JSX.Element {
           </Search>
           <Button className="header__button" variant="contained" onClick={sendSarchText}>
             Go
+          </Button>
+          <Button className="header__button header__button-clear" variant="contained" onClick={clearSearchField}>
+            Clear
           </Button>
         </Toolbar>
       </AppBar>

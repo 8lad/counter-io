@@ -20,6 +20,7 @@ import {
   disablePinTaskWithDB,
 } from "../../redux/actions";
 import { addingHashTag } from "../../helpers/helpers";
+import { StateType } from "../../redux/rootReducer";
 
 interface SingleListItemProps {
   text: string;
@@ -35,8 +36,16 @@ export function SingleListItem({ text, tags, id, isPinned }: SingleListItemProps
   const [editedTags, setEditedTags] = useState<string>("");
   const [editedTextError, setEditedTextError] = useState<boolean>(false);
   const [editedTagsError, setEditedTagsError] = useState<boolean>(false);
-  const { tasks } = useSelector((state: any) => state.tasksReducer);
+  const { tasks } = useSelector((state: StateType) => state.tasksReducer);
   const dispatch = useDispatch<any>();
+
+  // const lostFocuseSaving = (e: FocusEvent): void => {
+  //   const target = e.target as HTMLInputElement;
+  //   if (target.value.length) {
+  //     setEditedText(target.value);
+  //     setDisabledText(true);
+  //   }
+  // };
 
   const setPin = (): void => {
     setPinnedTask((state) => !state);
@@ -116,7 +125,6 @@ export function SingleListItem({ text, tags, id, isPinned }: SingleListItemProps
           fullWidth
           onBlur={(e) => {
             setEditedText(e.target.value);
-            setDisabledText(true);
           }}
         />
         <Input
@@ -128,7 +136,6 @@ export function SingleListItem({ text, tags, id, isPinned }: SingleListItemProps
           fullWidth
           onBlur={(e) => {
             setEditedTags(e.target.value);
-            setDisabledText(true);
           }}
         />
         {(editedTextError || editedTagsError) && (

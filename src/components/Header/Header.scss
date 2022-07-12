@@ -5,6 +5,10 @@
     border-top-left-radius: 0;
     box-shadow: none;
   }
+  &__button-clear.MuiButton-contained {
+    margin-left: 7px;
+    border-radius: 5px;
+  }
   &__search {
     border-radius: 4px 0 0 4px !important;
   }
