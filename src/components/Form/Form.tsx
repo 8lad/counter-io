@@ -6,9 +6,11 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import TextField from "@mui/material/TextField";
-import { addSingleTaskWithDB } from "../../redux/actions";
+import { Dispatch } from "redux";
+import { fetchAddSingleTask } from "../../redux/tasksSlice";
 import "./Form.scss";
 import { addingHashTag } from "../../helpers/helpers";
+import { StateType } from "../../redux/rootReducer";
 
 export function Form(): JSX.Element {
   const [textValue, setTextValue] = useState<string>("");
@@ -16,12 +18,18 @@ export function Form(): JSX.Element {
   const [tagText, setTagText] = useState<string>("");
   const [inputError, setInputError] = useState<boolean>(false);
   const [inputErrorText, setInputErrorText] = useState<string>("");
-  const dispatch = useDispatch<any>();
-  const { tasks } = useSelector((state: any) => state.tasksReducer);
+  const dispatch = useDispatch<Dispatch<any>>();
+  const { tasks } = useSelector((state: StateType) => state.tasksReducer);
 
   const saveSingleTask = (): void => {
     if (tagText && singleTaskText) {
-      dispatch(addSingleTaskWithDB({ id: nanoid(), tags: tagText, text: singleTaskText, isPinned: false }, tasks));
+      dispatch(
+        fetchAddSingleTask({
+          option: { id: nanoid(), tags: tagText, text: singleTaskText, isPinned: false },
+          payload: tasks,
+        }),
+      );
+
       setSingleTaskText("");
       setTagText("");
       setTextValue("");
