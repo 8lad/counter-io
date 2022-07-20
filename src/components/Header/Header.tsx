@@ -10,7 +10,7 @@ import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { setSearchRule, setIsFiltered } from "../../redux/actions";
+import { setIsFiltered, setSearchRule } from "../../redux/tasksSlice";
 import "./Header.scss";
 
 const Search = styled("div")(({ theme }) => ({

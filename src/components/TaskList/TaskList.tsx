@@ -5,24 +5,25 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { SpinnerDotted } from "spinners-react";
 import { useSelector, useDispatch } from "react-redux";
+import { Dispatch } from "redux";
 import { SingleListItem } from "../SingleListItem/SingleListItem";
-import { setSearchRule, loadAllTasks } from "../../redux/actions";
+import { fetchAllTasks, setSearchRule } from "../../redux/tasksSlice";
 import { filterTasks } from "../../helpers/helpers";
 import "./TaskList.scss";
-import { SingleTask } from "../../redux/tasksReducer";
+import { SingleTask } from "../../types";
 import { StateType } from "../../redux/rootReducer";
 
 export function TaskList(): JSX.Element {
   const { tasks, searchField, isTagFiltered, errorMessage, isLoading } = useSelector(
     (state: StateType) => state.tasksReducer,
   );
-  const [taskList, setTaskList] = useState<[] | SingleTask[]>([]);
-  const dispatch = useDispatch<any>();
+  const [taskList, setTaskList] = useState<SingleTask[]>([]);
+  const dispatch = useDispatch<Dispatch<any>>();
   const isHasTasks = !taskList.length && !errorMessage && !searchField && !isLoading;
   const isEmptySearch = !taskList.length && searchField;
 
   useEffect(() => {
-    dispatch(loadAllTasks());
+    dispatch(fetchAllTasks());
   }, [dispatch]);
 
   useEffect(() => {
@@ -48,7 +49,7 @@ export function TaskList(): JSX.Element {
           </Box>
         )}
         <List>
-          {taskList &&
+          {Array.isArray(taskList) &&
             taskList.map((item: SingleTask) => (
               <SingleListItem key={item.id} text={item.text} tags={item.tags} id={item.id} isPinned={item.isPinned} />
             ))}
