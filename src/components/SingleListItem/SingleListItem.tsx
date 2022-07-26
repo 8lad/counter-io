@@ -13,13 +13,9 @@ import Input from "@mui/material/Input";
 import "./SingleListItem.scss";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import {
-  fetchUpdateSingleTask,
-  fetchDeleteSingleTask,
-  fetchDisablePinTask,
-  fetchSetPinTask,
-} from "../../redux/tasksSlice";
+import { fetchUpdateSingleTask, fetchDeleteSingleTask, fetchPinTask } from "../../redux/tasksSlice";
 import { addingHashTag } from "../../helpers/helpers";
+import { AppDispatch, RootState } from "../../redux/store";
 
 interface SingleListItemProps {
   text: string;
@@ -28,52 +24,60 @@ interface SingleListItemProps {
   isPinned: boolean;
 }
 
-export function SingleListItem({ text, tags, id, isPinned }: SingleListItemProps): JSX.Element {
-  const [disabledText, setDisabledText] = useState<boolean>(true);
-  const [pinnedTask, setPinnedTask] = useState<boolean>(isPinned);
+export function SingleListItem({ text, tags, id, isPinned }: SingleListItemProps) {
+  const [isDisabledText, setIsDisabledText] = useState<boolean>(true);
+  const [isPinnedTask, setIsPinnedTask] = useState<boolean>(isPinned);
   const [editedText, setEditedText] = useState<string>("");
   const [editedTags, setEditedTags] = useState<string>("");
-  const [editedTextError, setEditedTextError] = useState<boolean>(false);
-  const [editedTagsError, setEditedTagsError] = useState<boolean>(false);
-  const { tasks } = useSelector((state: any) => state.tasksReducer);
-  const dispatch = useDispatch<any>();
+  const [isEditedTextError, setIsEditedTextError] = useState<boolean>(false);
+  const [isEditedTagsError, setIsEditedTagsError] = useState<boolean>(false);
+  const { tasks } = useSelector((state: RootState) => state.tasksReducer);
+  const dispatch = useDispatch<AppDispatch>();
 
   const setPin = (): void => {
-    setPinnedTask((state) => !state);
-    !pinnedTask
-      ? dispatch(fetchSetPinTask({ option: id, payload: tasks }))
-      : dispatch(fetchDisablePinTask({ option: id, payload: tasks }));
+    setIsPinnedTask((state) => !state);
+    dispatch(
+      fetchPinTask({
+        option: {
+          id,
+          text: editedText,
+          tags: editedTags,
+          isPinned: !isPinnedTask,
+        },
+        payload: tasks,
+      }),
+    );
   };
 
   const saveTask = (): void => {
     if (!editedText.length) {
-      setEditedTextError(true);
+      setIsEditedTextError(true);
       return;
     }
     if (!editedTags.length) {
-      setEditedTagsError(true);
+      setIsEditedTagsError(true);
       return;
     }
-    setDisabledText(true);
+    setIsDisabledText(true);
     dispatch(
       fetchUpdateSingleTask({
         option: {
           id,
           text: editedText,
           tags: editedTags,
-          isPinned: pinnedTask,
+          isPinned: isPinnedTask,
         },
         payload: tasks,
       }),
     );
-    setEditedTextError(false);
-    setEditedTagsError(false);
+    setIsEditedTextError(false);
+    setIsEditedTagsError(false);
   };
 
   const editTask = (): void => {
-    setDisabledText(false);
-    setEditedTagsError(false);
-    setEditedTextError(false);
+    setIsDisabledText(false);
+    setIsEditedTagsError(false);
+    setIsEditedTextError(false);
   };
 
   useEffect(() => {
@@ -86,7 +90,7 @@ export function SingleListItem({ text, tags, id, isPinned }: SingleListItemProps
       className="list__item"
       secondaryAction={
         <>
-          <IconButton aria-label="pin" color={pinnedTask ? "primary" : "default"} onClick={setPin}>
+          <IconButton aria-label="pin" color={isPinnedTask ? "primary" : "default"} onClick={setPin}>
             <PushPinIcon />
           </IconButton>
           <IconButton aria-label="edit" onClick={editTask}>
@@ -98,23 +102,23 @@ export function SingleListItem({ text, tags, id, isPinned }: SingleListItemProps
           <IconButton
             aria-label="delete"
             onClick={() => dispatch(fetchDeleteSingleTask({ option: id, payload: tasks }))}
-            disabled={pinnedTask}>
+            disabled={isPinnedTask}>
             <DeleteIcon />
           </IconButton>
         </>
       }>
       <ListItemAvatar>
         <Avatar variant="rounded">
-          <AssignmentIcon color={pinnedTask ? "primary" : undefined} />
+          <AssignmentIcon color={isPinnedTask ? "primary" : undefined} />
         </Avatar>
       </ListItemAvatar>
       <Box className="list__item-inputs">
         <Input
           className="list__item-input"
           multiline
-          disabled={disabledText}
+          disabled={isDisabledText}
           defaultValue={editedText}
-          error={editedTextError}
+          error={isEditedTextError}
           fullWidth
           onBlur={(e) => {
             setEditedText(e.target.value);
@@ -123,15 +127,15 @@ export function SingleListItem({ text, tags, id, isPinned }: SingleListItemProps
         <Input
           className="list__item-input"
           multiline
-          disabled={disabledText}
+          disabled={isDisabledText}
           defaultValue={addingHashTag(editedTags)}
-          error={editedTagsError}
+          error={isEditedTagsError}
           fullWidth
           onBlur={(e) => {
             setEditedTags(e.target.value);
           }}
         />
-        {(editedTextError || editedTagsError) && (
+        {(isEditedTextError || isEditedTagsError) && (
           <Typography className="list__item-error">Both field must be filled</Typography>
         )}
       </Box>

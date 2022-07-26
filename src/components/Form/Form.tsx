@@ -6,19 +6,19 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import TextField from "@mui/material/TextField";
-import { Dispatch } from "redux";
 import { fetchAddSingleTask } from "../../redux/tasksSlice";
 import "./Form.scss";
 import { addingHashTag } from "../../helpers/helpers";
 import { StateType } from "../../redux/rootReducer";
+import { AppDispatch } from "../../redux/store";
 
-export function Form(): JSX.Element {
+export function Form() {
   const [textValue, setTextValue] = useState<string>("");
   const [singleTaskText, setSingleTaskText] = useState<string>("");
   const [tagText, setTagText] = useState<string>("");
-  const [inputError, setInputError] = useState<boolean>(false);
+  const [isInputError, setIsInputError] = useState<boolean>(false);
   const [inputErrorText, setInputErrorText] = useState<string>("");
-  const dispatch = useDispatch<Dispatch<any>>();
+  const dispatch = useDispatch<AppDispatch>();
   const { tasks } = useSelector((state: StateType) => state.tasksReducer);
 
   const saveSingleTask = (): void => {
@@ -33,9 +33,9 @@ export function Form(): JSX.Element {
       setSingleTaskText("");
       setTagText("");
       setTextValue("");
-      setInputError(false);
+      setIsInputError(false);
     } else {
-      setInputError(true);
+      setIsInputError(true);
       setInputErrorText("You must set task and tags");
     }
   };
@@ -44,17 +44,17 @@ export function Form(): JSX.Element {
     setSingleTaskText("");
     setTagText("");
     setTextValue("");
-    setInputError(false);
+    setIsInputError(false);
   };
 
   const addTextInTask = (func: (prop: string) => void) => {
     if (textValue.length < 2) {
-      setInputError(true);
+      setIsInputError(true);
       setInputErrorText("Text must containe at least 2 symbols");
     } else {
       func(textValue);
       setTextValue("");
-      setInputError(false);
+      setIsInputError(false);
     }
   };
 
@@ -70,10 +70,10 @@ export function Form(): JSX.Element {
             label="Put your task or tag"
             variant="outlined"
             value={textValue}
-            error={inputError}
-            helperText={inputError && inputErrorText}
+            error={isInputError}
+            helperText={isInputError && inputErrorText}
             onChange={(e) => setTextValue(e.target.value)}
-            onBlur={() => setInputError(false)}
+            onBlur={() => setIsInputError(false)}
           />
         </Box>
         <ButtonGroup variant="contained" aria-label="outlined primary button group">

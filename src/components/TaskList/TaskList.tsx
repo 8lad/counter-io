@@ -13,7 +13,7 @@ import "./TaskList.scss";
 import { SingleTask } from "../../types";
 import { StateType } from "../../redux/rootReducer";
 
-export function TaskList(): JSX.Element {
+export function TaskList() {
   const { tasks, searchField, isTagFiltered, errorMessage, isLoading } = useSelector(
     (state: StateType) => state.tasksReducer,
   );

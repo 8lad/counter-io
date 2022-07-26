@@ -29,16 +29,15 @@ export const fetchAllTasks = createAsyncThunk<SingleTask[], void, { rejectValue:
   },
 );
 
-export const fetchSetPinTask = createAsyncThunk<SingleTask[], Action<string, SingleTask[]>, { rejectValue: string }>(
+export const fetchPinTask = createAsyncThunk<SingleTask[], Action<SingleTask, SingleTask[]>, { rejectValue: string }>(
   "tasks/fetchPinTask",
   async (data, thunkApi) => {
     const { option, payload } = data;
-    const taskIndex = payload!.findIndex((item) => item.id === option);
-    const currentTask = payload!.slice(taskIndex, taskIndex + 1)[0];
     try {
       await setData("baseData", [
-        { ...currentTask, isPinned: true },
-        ...payload!.slice(0, taskIndex).concat(payload!.slice(taskIndex + 1)),
+        ...payload!
+          .map((item) => (item.id === option.id ? { ...item, isPinned: option.isPinned } : item))
+          .sort((a, b) => Number(b.isPinned) - Number(a.isPinned)),
       ]);
       return await getAllData();
     } catch (e) {
@@ -46,25 +45,6 @@ export const fetchSetPinTask = createAsyncThunk<SingleTask[], Action<string, Sin
     }
   },
 );
-
-export const fetchDisablePinTask = createAsyncThunk<
-  SingleTask[],
-  Action<string, SingleTask[]>,
-  { rejectValue: string }
->("tasks/fetchDisablePinTask", async (data, thunkApi) => {
-  const { option, payload } = data;
-  const taskIndex = payload!.findIndex((item) => item.id === option);
-  const currentTask = payload!.slice(taskIndex, taskIndex + 1)[0];
-  try {
-    await setData("baseData", [
-      ...payload!.slice(0, taskIndex).concat(payload!.slice(taskIndex + 1)),
-      { ...currentTask, isPinned: false },
-    ]);
-    return await getAllData();
-  } catch (e) {
-    return thunkApi.rejectWithValue(returnErrorText(e as Error));
-  }
-});
 
 export const fetchDeleteSingleTask = createAsyncThunk<
   SingleTask[],
@@ -134,29 +114,17 @@ const tasksSlice = createSlice({
         state.isLoading = false;
         state.errorMessage = action.payload!;
       })
-      .addCase(fetchSetPinTask.pending, (state) => {
+      .addCase(fetchPinTask.pending, (state) => {
         state.isLoading = true;
         state.errorMessage = "";
       })
-      .addCase(fetchSetPinTask.fulfilled, (state, action) => {
+      .addCase(fetchPinTask.fulfilled, (state, action) => {
         state.isLoading = false;
         state.tasks = action.payload;
       })
-      .addCase(fetchSetPinTask.rejected, (state, action) => {
+      .addCase(fetchPinTask.rejected, (state, action) => {
         state.isLoading = false;
         state.errorMessage = action.payload!;
-      })
-      .addCase(fetchDisablePinTask.pending, (state) => {
-        state.isLoading = true;
-        state.errorMessage = "";
-      })
-      .addCase(fetchDisablePinTask.fulfilled, (state, action) => {
-        state.tasks = action.payload;
-        state.isLoading = false;
-      })
-      .addCase(fetchDisablePinTask.rejected, (state, action) => {
-        state.errorMessage = action.payload!;
-        state.isLoading = false;
       })
       .addCase(fetchDeleteSingleTask.pending, (state) => {
         state.isLoading = true;

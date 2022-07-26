@@ -54,17 +54,17 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export function Header(): JSX.Element {
+export function Header() {
   const [searchText, setSearchText] = useState<string>("");
-  const [searchTextError, setSearchTextError] = useState<boolean>(false);
+  const [isSearchTextError, setIsSearchTextError] = useState<boolean>(false);
   const dispatch = useDispatch();
 
   const sendSarchText = (): void => {
     if (!searchText || searchText.length < 2) {
-      setSearchTextError(true);
+      setIsSearchTextError(true);
     } else {
       dispatch(setSearchRule(searchText));
-      setSearchTextError(false);
+      setIsSearchTextError(false);
     }
   };
 
@@ -103,7 +103,7 @@ export function Header(): JSX.Element {
             </SearchIconWrapper>
             <StyledInputBase
               error
-              placeholder={searchTextError ? "Field is empty" : "Search…"}
+              placeholder={isSearchTextError ? "Field is empty" : "Search…"}
               inputProps={{ "aria-label": "search" }}
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
